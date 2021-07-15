@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Management Dashboard</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
+</head>
+<body>
+    <div class="dashboard"><!-- Dashboard -->
+        <section class="navigation"><!-- Navigation -->
+            <img src="{% static 'assets/img/logo-thumbnail.png' %}" alt="InstinctHub Logo" class="logo">
+
+            <div>
+                <span class="material-icons-outlined"> dashboard </span>
+                <span class="material-icons-outlined"> trending_up </span>
+                <span class="material-icons-outlined"> people_alt </span>
+                <span class="material-icons-outlined"> insert_invitation </span>
+                <span class="material-icons-outlined">settings_suggest</span>
+            </div>
+
+            <img src="{% static 'assets/img/2.jpg' %}" alt="User Image" class="user">
+
+        </section><!-- Navigation End -->
+
+        <section class="main"><!-- Main -->
+            <div class="search"><!-- Search -->
+                <form action="">
+                    <input type="text" name="search" id="search" placeholder="Search Here">
+                    <span class="material-icons-outlined"> search </span>
+                </form>
+
+                <div class="notification">
+                    <span class="material-icons-outlined"> notifications </span>
+                    <span class="material-icons-outlined"> edit </span>
+                </div>
+            </div><!-- Search End -->
+
+            <div class="title">
+                <h1>My Project</h1>
+                <form action="#">
+                    <label for="projects">Sort By</label>
+                    <select name="projects" id="projects">
+                        <option value="recent">Recent Project</option>
+                        <option value="finished">Finished Project</option>
+                        <option value="ongoing">Ongoing Project</option>
+                        <option value="stalled">Stalled Project</option>
+                    </select>
+                </form>
+            </div>
+
+            <div class="project_list"><!-- Project List -->
+
+               {% if project %}
+                    {% for p in project %}
+                        <div class="project"><!-- Project1 -->
+                            <div class="category category_color1"></div>
+                            <h2>{{ p.title }}</h2>
+                            <p>{{ p.timestamp }}</p>
+        
+                            <ul class="activity">
+                                <li>{{ p.description }}</li>
+                                
+                            </ul>
+        
+                            <div class="meta">
+                                <div class="contributors">
+                                    <img src="{{ p.team.image.url }}" alt="">
+                                   
+                                </div>
+                                <span class="material-icons-outlined">more_vert</span>
+                            </div>
+                        </div><!-- Project1 End -->
+                    {% endfor %}
+               {% else %}
+                    <p> No Project</h1>
+               {% endif %}
+
+                
+
+            </div><!-- Project List End -->
+
+        </section><!-- Main End -->
+
+        <section class="secondary"><!-- Secondary -->
+            <div class="chart">
+                <h2>Total Project</h2>
+                <canvas id="myChart" width="400" height="400"></canvas>
+
+                <div class="complete">
+                    <h3>3 Completed</h3>
+                    <p>from 5 projects</p>
+                </div>
+            </div>
+
+            <div class="recent_project"><!-- Recent Project -->
+                {% if recent_work %}
+                    {% for work in recent_work %}
+                        <div class="listing">
+                            <div class="title">
+                                <div class="category category_color1"></div>
+                                <h2> {{ work.title }}</h2>
+                                <p>by {{ work.team }}</p>
+                            </div>
+                            <span class="material-icons-outlined">more_vert</span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="title">
+                        <div class="category category_color1"></div>
+                        <h2>No recent project</h2>
+                       
+                    </div>
+                {% endif %}
+            </div><!-- Recent Project End -->
+
+        </section><!-- Secondary End -->
+
+    </div><!-- Dashboard End-->
+    
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    'Completed',
+                    'Ongoing',
+                    'Stalled'
+                ],
+                datasets: [{
+                    label: 'My First Dataset',
+                    data: [300, 50, 100],
+                    backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)'
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+        });
+        </script>
+</body>
+</html>
